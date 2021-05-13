@@ -1,0 +1,11 @@
+﻿# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/modules.xml
+/contentModel.xml
+/.idea.ConsoleTestApp.iml
+/projectSettingsUpdater.xml
+# Datasource local storage ignored files
+/../../../../../../../../../:\Users\User\source\repos\ConsoleTestApp\.idea\.idea.ConsoleTestApp\.idea/dataSources/
+/dataSources.local.xml
