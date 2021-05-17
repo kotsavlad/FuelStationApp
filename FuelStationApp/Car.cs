@@ -1,37 +1,32 @@
 ﻿using System;
 using System.Threading;
 
-public class Car
+public record Car(string Name, AbstractFuelStation Station, int TankVolume, int RefuelCount, int RequiredVolume = 0)
 {
-    private static Random random = new Random();
-    public string Name { get; set; }
-    public int TankVolume { get; }
-    public AbstractFuelStation Station { get; }
-    public int RefuelCount { get; }
+    private static readonly Random random = new Random();
 
-    public Car(string name, AbstractFuelStation station, int tankVolume, int refuelCount)
-    {
-        Name = name;
-        TankVolume = tankVolume;
-        Station = station;
-        RefuelCount = refuelCount;
-    }
+    public virtual int GetVolume() =>
+        RequiredVolume == 0 ? random.Next(TankVolume) + 1 : RequiredVolume;
 
     public void Run()
     {
         Console.WriteLine($"{Name} STARTED; refuel count is {RefuelCount}");
         for (int i = 0; i < RefuelCount; i++)
         {
-            var volume = random.Next(TankVolume) + 1;
+            var volume = GetVolume();
             Console.WriteLine($"{Name} tries to get {volume} litres for {i + 1} times");
+            int trialCount = 0;
             while (!Station.TryRefuel(this, volume))
             {
-                Console.WriteLine($"Fuel reserve is insufficient. {Name} is waiting");
+                Console.WriteLine(
+                    $"{Name} trial #{++trialCount} of refueling #{i + 1} was unsuccessfully due to insufficient reserve. {Name} is waiting");
                 Thread.Sleep(random.Next(1, 5) * 1000);
             }
+
             Console.WriteLine($"{Name} left the station for {i + 1} times");
             Thread.Sleep(random.Next(1, 3) * 1000);
         }
+
         Console.WriteLine($"{Name} SAID GOOD-BYE");
     }
 }
